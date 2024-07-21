@@ -1,58 +1,107 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="edumeet-container">
+    <div class="left-panel">
+      <img src="@/assets/images/edu_logo.jpg" alt="Edumeet Logo" class="logo" />
+      <h2>Ita prontu atu foti ekipa ba level tuir mai?</h2>
+      <p>
+        Mai ita hasae tan diskusaun, kolaborasaun, no produtividade hamutuk iha
+        sesaun tuir main
+      </p>
+      <button class="primary-button" @click="goToJoinMeeting">Tama Enkontru</button>
+      <button class="primary-button" @click="goToCreateMeeting">Kria Enkontru</button>
+    </div>
+    <div class="right-panel">
+      <img src="@/assets/images/group_home.jpg" alt="Characters" class="characters" />
+      <h2>Chese! Big smiles, everyone!</h2>
+      <p>
+        Iha ne'e ami halibur hamutuk iha fatin dijital ida-ne'ebé nakonu ho
+        vontade hodi fahe, aprende no liga malu iha tempu real.
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  name: "HelloWorld",
+  methods: {
+    goToJoinMeeting() {
+      this.$router.push('/join');
+    },
+    goToCreateMeeting() {
+      this.$router.push('/create');
+    }
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
+html, body, .edumeet-container {
+  height: 100%;
+  margin: 0;
   padding: 0;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.edumeet-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 }
-a {
-  color: #42b983;
+
+.left-panel,
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.left-panel {
+  background-color: #fff;
+}
+
+.right-panel {
+  background-color: #212121;
+  color: #fff;
+}
+
+.logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.characters {
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.primary-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.primary-button:hover {
+  background-color: #0056b3;
 }
 </style>
+
