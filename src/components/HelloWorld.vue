@@ -26,7 +26,7 @@ export default {
   name: "HelloWorld",
   methods: {
     goToJoinMeeting() {
-      this.$router.push('/join');
+      this.$router.push('/jitsiMeet');
     },
     goToCreateMeeting() {
       this.$router.push('/create');
@@ -104,4 +104,3 @@ p {
   background-color: #0056b3;
 }
 </style>
-
