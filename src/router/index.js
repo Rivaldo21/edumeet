@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HelloWorld from '../components/HelloWorld.vue';
+import HelloWorld from '../components/Edumeet.vue';
 import JitsiMeet from '../components/JitsiMeet.vue';
 
 const routes = [
   { path: '/', component: HelloWorld },
-  { path: '/jitsiMeet', component: JitsiMeet }, // Untuk join meeting
-  { path: '/create', component: JitsiMeet }, // Untuk create meeting
+  { path: '/jitsiMeet', component: JitsiMeet }, 
+  { path: '/create', component: JitsiMeet },
 ];
 
 const router = createRouter({

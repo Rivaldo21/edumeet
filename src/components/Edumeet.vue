@@ -2,21 +2,31 @@
   <div class="edumeet-container">
     <div class="left-panel">
       <img src="@/assets/images/edu_logo.jpg" alt="Edumeet Logo" class="logo" />
-      <h2>Ita prontu atu foti ekipa ba level tuir mai?</h2>
-      <p>
-        Mai ita hasae tan diskusaun, kolaborasaun, no produtividade hamutuk iha
-        sesaun tuir main
-      </p>
+      <div class="text-content">
+        <h2>
+          Ita prontu atu foti ekipa <br />
+          ba level tuir mai?
+        </h2>
+        <p>
+          Mai ita hasae tan diskusaun,<br />
+          kolaborasaun, no produtividade<br />
+          hamutuk iha sesaun tuir main
+        </p>
+      </div>
       <button class="primary-button" @click="goToJoinMeeting">Tama Enkontru</button>
       <button class="primary-button" @click="goToCreateMeeting">Kria Enkontru</button>
     </div>
     <div class="right-panel">
       <img src="@/assets/images/group_home.jpg" alt="Characters" class="characters" />
-      <h2>Chese! Big smiles, everyone!</h2>
-      <p>
-        Iha ne'e ami halibur hamutuk iha fatin dijital ida-ne'ebé nakonu ho
-        vontade hodi fahe, aprende no liga malu iha tempu real.
-      </p>
+      <div class="text-content">
+        <h2>Chese! Big smiles, everyone!</h2>
+        <p>
+          Iha ne'e ami halibur hamutuk<br />
+          iha fatin dijital ida-ne'ebé nakonu<br />
+          ho vontade hodi fahe, aprende<br />
+          no liga malu iha tempu real.
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,10 +69,22 @@ html, body, .edumeet-container {
 }
 
 .left-panel {
+  flex: 2; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
   background-color: #fff;
 }
 
 .right-panel {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
   background-color: #212121;
   color: #fff;
 }
@@ -77,16 +99,15 @@ html, body, .edumeet-container {
   margin-bottom: 20px;
 }
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.text-content {
   text-align: center;
+  line-height: 1.5;
+  padding: 0 10px;
+  margin-bottom: 20px;
 }
 
-p {
-  font-size: 16px;
-  margin-bottom: 20px;
-  text-align: center;
+.text-content h2, .text-content p {
+  margin: 0 0 10px 0;
 }
 
 .primary-button {
@@ -96,8 +117,9 @@ p {
   padding: 15px 30px;
   margin: 10px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 100px;
   font-size: 16px;
+  width: 300px; 
 }
 
 .primary-button:hover {
