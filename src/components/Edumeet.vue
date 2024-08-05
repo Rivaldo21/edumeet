@@ -28,15 +28,58 @@
         </p>
       </div>
     </div>
+    <div id="jaas-container"></div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "HelloWorld",
   methods: {
+    async getJWTToken(roomName, name, email, avatar) {
+      try {
+        const response = await axios.post('http://localhost:3000/api/generate-jwt', {
+          room: roomName,
+          name: name,
+          email: email,
+          avatar: avatar
+        });
+
+        return response.data.token;
+      } catch (error) {
+        console.error('Error generating JWT token:', error);
+        return null;
+      }
+    },
+    async joinMeeting() {
+      const roomName = 'test-room';
+      const name = 'John Doe';
+      const email = 'john.doe@example.com';
+      const avatar = 'https://example.com/avatar.png';
+
+      const token = await this.getJWTToken(roomName, name, email, avatar);
+
+      if (token) {
+        const domain = "8x8.vc";
+        const options = {
+          roomName: `vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/${roomName}`,
+          parentNode: document.querySelector('#jaas-container'),
+          jwt: token
+        };
+
+        if (window.JitsiMeetExternalAPI) {
+          new window.JitsiMeetExternalAPI(domain, options);
+        } else {
+          console.error('JitsiMeetExternalAPI is not available.');
+        }
+      } else {
+        console.error('Failed to get JWT token.');
+      }
+    },
     goToJoinMeeting() {
-      this.$router.push('/jitsiMeet');
+      this.joinMeeting();
     },
     goToCreateMeeting() {
       this.$router.push('/create');
@@ -69,7 +112,7 @@ html, body, .edumeet-container {
 }
 
 .left-panel {
-  flex: 2; 
+  flex: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,7 +122,7 @@ html, body, .edumeet-container {
 }
 
 .right-panel {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,7 +162,7 @@ html, body, .edumeet-container {
   cursor: pointer;
   border-radius: 100px;
   font-size: 16px;
-  width: 300px; 
+  width: 300px;
 }
 
 .primary-button:hover {
