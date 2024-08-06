@@ -28,7 +28,6 @@
         </p>
       </div>
     </div>
-    <div id="jaas-container"></div>
   </div>
 </template>
 
@@ -40,7 +39,7 @@ export default {
   methods: {
     async getJWTToken(roomName, name, email, avatar) {
       try {
-        const response = await axios.post('http://localhost:3000/api/generate-jwt', {
+        const response = await axios.post('https://edumeet-nine.vercel.app/api/generate-jwt', {
           room: roomName,
           name: name,
           email: email,
@@ -79,7 +78,7 @@ export default {
       }
     },
     goToJoinMeeting() {
-      this.joinMeeting();
+      this.$router.push('/joint');
     },
     goToCreateMeeting() {
       this.$router.push('/create');

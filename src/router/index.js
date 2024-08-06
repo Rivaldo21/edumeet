@@ -4,7 +4,7 @@ import JitsiMeet from '../components/JitsiMeet.vue';
 
 const routes = [
   { path: '/', component: HelloWorld },
-  { path: '/jitsiMeet', component: JitsiMeet }, 
+  { path: '/joint', component: JitsiMeet }, 
   { path: '/create', component: JitsiMeet },
 ];
 

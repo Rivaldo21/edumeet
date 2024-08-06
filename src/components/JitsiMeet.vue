@@ -8,7 +8,7 @@ export default {
   mounted() {
     const domain = "8x8.vc";
     const options = {
-      roomName: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/SampleAppInterestedSurplusTerrifyThen",
+      roomName: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/Edumeet",
       parentNode: document.querySelector('#jaas-container'),
       jwt: ""
     };
