@@ -83,7 +83,7 @@ export default {
       }
     },
     goToJoinMeeting() {
-      this.joinMeeting();
+      this.$router.push('/joint');
     },
     goToCreateMeeting() {
       this.$router.push('/create');
