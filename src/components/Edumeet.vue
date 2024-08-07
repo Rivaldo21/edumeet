@@ -35,16 +35,16 @@
 <script>
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://edumeet-chqsroszg-rivaldo-guterres-projects.vercel.app/api'
-  : 'http://localhost:3000/api';
+// const API_BASE_URL = process.env.NODE_ENV === 'production'
+//   ? 'https://edumeet-chqsroszg-rivaldo-guterres-projects.vercel.app/api'
+//   : 'http://localhost:3000/api';
 
 export default {
   name: "HelloWorld",
   methods: {
     async getJWTToken(roomName, name, email, avatar) {
       try {
-        const response = await axios.post(`${API_BASE_URL}/generate-jwt`, {
+        const response = await axios.post(`https://edumeet-nine.vercel.app/api/generate-jwt`, {
           room: roomName,
           name: name,
           email: email,

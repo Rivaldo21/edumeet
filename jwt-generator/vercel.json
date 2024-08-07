@@ -8,10 +8,11 @@
     ],
     "routes": [
       {
-        "src": "/api/(.*)",
+        "src": "/api/generate-jwt",
         "dest": "/api/generate-jwt.js"
       }
     ]
   }
+  
   
   
