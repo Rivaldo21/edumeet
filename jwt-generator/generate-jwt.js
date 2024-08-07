@@ -1,50 +1,60 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const uuid = require('uuid-random');
+var jsonwebtoken = require("jsonwebtoken");
+var uuid = require("uuid-random");
+const express = require("express");
+const fs = require("fs"); // Import the fs module to read files
 
-// Fungsi untuk menghasilkan dan menandatangani JWT
-function generate(privateKey, { id, name, email, avatar, appId, kid }) {
-  const payload = {
-    aud: 'jitsi',
-    iss: 'chat',
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (100 * 365 * 24 * 60 * 60), 
-    nbf: Math.floor(Date.now() / 1000),
-    sub: appId,
-    context: {
-      features: {
-        livestreaming: true,
-        'outbound-call': true,
-        'sip-outbound-call': false,
-        transcription: true,
-        recording: true
+const app = express();
+const port = 3000;
+
+app.get("/", (req, res) => {
+  const generate = (privateKey, { id, name, email, avatar, appId, kid }) => {
+    const now = new Date();
+    const jwt = jsonwebtoken.sign(
+      {
+        aud: "jitsi",
+        context: {
+          user: {
+            id,
+            name,
+            avatar,
+            email: email,
+            moderator: "true",
+          },
+          features: {
+            livestreaming: "true",
+            recording: "true",
+            transcription: "true",
+            "outbound-call": "true",
+          },
+        },
+        iss: "chat",
+        room: "*",
+        sub: appId,
+        exp: Math.round(now.setHours(now.getHours() + 3) / 1000),
+        nbf: Math.round(new Date().getTime() / 1000) - 10,
       },
-      user: {
-        'hidden-from-recorder': false,
-        moderator: true,
-        name,
-        id,
-        avatar,
-        email
-      }
-    },
-    room: '*'
+      privateKey,
+      { algorithm: "RS256", header: { kid } }
+    );
+    return jwt;
   };
 
-  return jwt.sign(payload, privateKey, { algorithm: 'RS256', keyid: kid });
-}
+  const privateKey = fs.readFileSync("./private.key", "utf8");
 
-// Lee private key husi file "private.key"
-const privateKey = fs.readFileSync('private.key', 'utf8');
+  const token = generate(privateKey, {
+    id: uuid(),
+    name: "R J",
+    email: "rj142872@gmail.com",
+    avatar: "avatar",
+    appId: "vpaas-magic-cookie-8bb988617ed14047acc207e7f35ddcaa",
+    kid: "vpaas-magic-cookie-8bb988617ed14047acc207e7f35ddcaa/1d6875",
+  });
 
-// Generate JWT
-const token = generate(privateKey, {
-  id: uuid(), // Uza UUID hanesan ID uzuariu
-  name: "", // Troka ho ita-nia naran uzuariu
-  email: "", // Troka ho ita-nia email uzuariu
-  avatar: "", // Troka ho URL-ita nia profile avatar 
-  appId: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51", // Troka ho ita-nia AppID
-  kid: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/7131dd" // Troka ho ita-nia API key
+  console.log(token);
+
+  res.json({ token: token });
 });
 
-console.log(token); // Hakerek JWT iha consol
+app.listen(port, () => {
+  console.log(`app listening on port ${port}`);
+});
