@@ -9,7 +9,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const privateKey = fs.readFileSync('api/private.key', 'utf8');
+const privateKeyPath = 'api/private.key';
+console.log(`Reading private key from ${privateKeyPath}`);
+const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+console.log('Private key read successfully');
 
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
@@ -56,10 +59,11 @@ const generateJWT = (room, name, email, avatar) => {
 };
 
 app.post('/api/generate-jwt', (req, res) => {
-  console.log('Request received:', req.body);
+  console.log('Received request:', req.body);
   try {
     const { room, name, email, avatar } = req.body;
     const token = generateJWT(room, name, email, avatar);
+    console.log('Token generated:', token);
 
     if (token) {
       res.json({ token });
@@ -72,9 +76,7 @@ app.post('/api/generate-jwt', (req, res) => {
   }
 });
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;
-
