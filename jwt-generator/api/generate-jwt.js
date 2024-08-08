@@ -23,7 +23,7 @@ const generateJWT = (room, name, email, avatar) => {
     iss: 'chat',
     iat,
     exp,
-    
+    nbf: iat,
     sub: appId,
     context: {
       features: {
