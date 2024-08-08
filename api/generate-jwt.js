@@ -23,6 +23,7 @@ const generateJWT = (room, name, email, avatar) => {
     iss: 'chat',
     iat,
     exp,
+    nbf: iat,
     sub: appId,
     context: {
       features: {
@@ -55,22 +56,17 @@ const generateJWT = (room, name, email, avatar) => {
 };
 
 app.post('/api/generate-jwt', (req, res) => {
-  console.log('Request received');
-  console.log('Request body:', req.body);
-  
   const { room, name, email, avatar } = req.body;
   const token = generateJWT(room, name, email, avatar);
 
   if (token) {
-    console.log('Token generated:', token);
     res.json({ token });
   } else {
-    console.log('Failed to generate token');
     res.status(500).send('Failed to generate token');
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
+
 
 
