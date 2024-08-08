@@ -17,13 +17,14 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 const generateJWT = (room, name, email, avatar) => {
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + (100 * 365 * 24 * 60 * 60);
+  const nbf = iat - 10;
 
   const payload = {
     aud: 'jitsi',
     iss: 'chat',
     iat,
     exp,
-    nbf: iat,
+    nbf,
     sub: appId,
     context: {
       features: {
@@ -68,3 +69,4 @@ app.post('/api/generate-jwt', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+

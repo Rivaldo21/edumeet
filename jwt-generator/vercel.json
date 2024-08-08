@@ -1,15 +1,13 @@
 {
     "version": 2,
-    "builds": [
-        { "src": "jwt-generator/generate-jwt.js", "use": "@vercel/node" }
-    ],
     "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "jwt-generator/generate-jwt.js"
-        }
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/generate-jwt"
+      }
     ]
-}
+  }
+  
 
   
   
