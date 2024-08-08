@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const privateKey = fs.readFileSync('jwt-generator/private.key', 'utf8');
+const privateKey = fs.readFileSync('private.key', 'utf8');
 
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
@@ -69,4 +69,3 @@ app.post('/api/generate-jwt', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-module.exports = app;
