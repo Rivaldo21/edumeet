@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Pastikan path ke private.key benar
-const privateKey = fs.readFileSync('private.key', 'utf8');
+const privateKey = fs.readFileSync('api/private.key', 'utf8');
 
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
