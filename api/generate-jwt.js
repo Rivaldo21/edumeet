@@ -67,6 +67,3 @@ app.post('/api/generate-jwt', (req, res) => {
 });
 
 module.exports = app;
-
-
-
