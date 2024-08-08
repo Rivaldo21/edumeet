@@ -9,7 +9,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Pastikan path ke private.key benar
 const privateKey = fs.readFileSync('api/private.key', 'utf8');
 
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
@@ -57,24 +56,25 @@ const generateJWT = (room, name, email, avatar) => {
 };
 
 app.post('/api/generate-jwt', (req, res) => {
+  console.log('Request received:', req.body);
   try {
     const { room, name, email, avatar } = req.body;
-    console.log('Received request:', req.body); // Add this line
     const token = generateJWT(room, name, email, avatar);
-    
+
     if (token) {
       res.json({ token });
     } else {
       res.status(500).send('Failed to generate token');
     }
   } catch (error) {
-    console.error('Error generating JWT:', error); // Add this line
-    res.status(500).send('Internal Server Error');
+    console.error('Error generating token:', error);
+    res.status(500).send('Server error');
   }
 });
 
 
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;
+
