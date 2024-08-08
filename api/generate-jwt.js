@@ -17,14 +17,12 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 const generateJWT = (room, name, email, avatar) => {
   const iat = Math.floor(Date.now() / 1000);
   const exp = iat + (100 * 365 * 24 * 60 * 60);
-  const nbf = iat - 10;
 
   const payload = {
     aud: 'jitsi',
     iss: 'chat',
     iat,
     exp,
-    nbf,
     sub: appId,
     context: {
       features: {
@@ -57,16 +55,22 @@ const generateJWT = (room, name, email, avatar) => {
 };
 
 app.post('/api/generate-jwt', (req, res) => {
+  console.log('Request received');
+  console.log('Request body:', req.body);
+  
   const { room, name, email, avatar } = req.body;
   const token = generateJWT(room, name, email, avatar);
 
   if (token) {
+    console.log('Token generated:', token);
     res.json({ token });
   } else {
+    console.log('Failed to generate token');
     res.status(500).send('Failed to generate token');
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 
