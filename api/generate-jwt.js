@@ -11,7 +11,7 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 const generateJWT = (room, name, email, avatar) => {
   const iat = Math.floor(Date.now() / 1000); // Waktu sekarang
   const exp = iat + (60 * 60); // Token berlaku selama 1 jam
-  const nbf = iat + 1; // Token dapat digunakan segera
+  const nbf = iat; // Token dapat digunakan segera
 
   const payload = {
     aud: 'jitsi',
