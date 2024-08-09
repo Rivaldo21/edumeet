@@ -9,15 +9,16 @@ const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
 const generateJWT = (room, name, email, avatar) => {
-  const iat = Math.floor(Date.now() / 1000);
-  const exp = iat + (100 * 365 * 24 * 60 * 60);
+  const iat = Math.floor(Date.now() / 1000); // Waktu sekarang
+  const exp = iat + (60 * 60); // Token berlaku selama 1 jam
+  const nbf = iat; // Token dapat digunakan segera
 
   const payload = {
     aud: 'jitsi',
     iss: 'chat',
     iat,
     exp,
-    nbf: iat,
+    nbf, // Sertakan nbf dalam payload
     sub: appId,
     context: {
       features: {
@@ -31,12 +32,12 @@ const generateJWT = (room, name, email, avatar) => {
         'hidden-from-recorder': false,
         moderator: true,
         name,
-        id: uuid(),
+        id: uuid(), // ID unik untuk pengguna
         avatar,
         email
       }
     },
-    room
+    room // Sertakan room
   };
 
   const options = {
@@ -48,6 +49,7 @@ const generateJWT = (room, name, email, avatar) => {
 
   return jwt.sign(payload, privateKey, options);
 };
+
 
 module.exports = (req, res) => {
   console.log("Request received:", req.body); // Logging request body
