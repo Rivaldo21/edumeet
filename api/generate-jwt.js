@@ -9,17 +9,18 @@ const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
 const generateJWT = (room, name, email, avatar) => {
-  const iat = Math.floor(Date.now() / 1000); // Waktu saat ini dalam detik
-  const exp = iat + (60 * 60); // Token berlaku selama 1 jam (3600 detik)
-  const nbf = Math.round(new Date().getTime() / 1000) - 10; // Token dapat digunakan segera setelah dikeluarkan
+  const now = Math.floor(Date.now() / 1000); // Waktu sekarang dalam detik
+  const iat = now;
+  const nbf = iat; // Kapan token mulai berlaku
+  const exp = now + (60 * 60); // Token berlaku selama 1 jam
 
   const payload = {
-    aud: 'jitsi',
-    iss: 'chat',
-    iat,
-    exp,
-    nbf, 
-    sub: appId,
+    aud: 'jitsi', // Audience
+    iss: 'chat', // Issuer
+    iat, // Issued at
+    exp, // Expires
+    nbf, // Not before
+    sub: appId, // Subject
     context: {
       features: {
         livestreaming: true,
@@ -30,35 +31,34 @@ const generateJWT = (room, name, email, avatar) => {
       },
       user: {
         'hidden-from-recorder': false,
-        moderator: true,
+        moderator: true, // Apakah pengguna adalah moderator
         name,
         id: uuid(), // ID unik untuk pengguna
         avatar,
         email
       }
     },
-    room // Sertakan room
+    room // Ruang yang hendak ditempati
   };
 
   const options = {
-    algorithm: 'RS256',
+    algorithm: 'RS256', // Algoritma yang digunakan
     header: {
-      kid: keyId
+      kid: keyId // Key ID
     }
   };
 
-  return jwt.sign(payload, privateKey, options); // Return signed JWT token
+  return jwt.sign(payload, privateKey, options); // Memberikan JWT ditandai
 };
 
-
 module.exports = (req, res) => {
-  console.log("Request received:", req.body); // Logging request body
+  console.log("Request received:", req.body); // Log input request
   const { room, name, email, avatar } = req.body;
   try {
     const token = generateJWT(room, name, email, avatar);
-    res.json({ token });
+    res.json({ token }); // Kirim token sebagai tanggapan JSON
   } catch (error) {
-    console.error("Error generating token:", error); // Logging error
-    res.status(500).send('Failed to generate token');
+    console.error("Error generating token:", error); // Log error
+    res.status(500).send('Failed to generate token'); // Kirim pesan error
   }
 };
