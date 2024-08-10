@@ -1,64 +1,63 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const { v4: uuid } = require('uuid');
+var jsonwebtoken = require("jsonwebtoken");
+var uuid = require("uuid-random");
+const express = require("express");
+const fs = require("fs"); 
 
-// Jalur absolut untuk kunci pribadi
-const privateKey = fs.readFileSync(`${__dirname}/private.key`, 'utf8');
+const app = express();
+const port = 3000;
 
-const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
-const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
+app.get("/", (req, res) => {
+  const generate = (privateKey, { id, name, email, avatar, appId, kid }) => {
+    const now = new Date();
 
-const generateJWT = (room, name, email, avatar) => {
-  const iat = Math.floor(Date.now() / 1000); // Waktu sekarang
-  const exp = iat + (60 * 60); // Token berlaku selama 1 jam
-  // const nbf = iat; // Token dapat digunakan segera
-
-  const payload = {
-    aud: 'jitsi',
-    iss: 'chat',
-    iat,
-    exp,
-    // nbf, // Sertakan nbf dalam payload
-    sub: appId,
-    context: {
-      features: {
-        livestreaming: true,
-        'outbound-call': true,
-        'sip-outbound-call': false,
-        transcription: true,
-        recording: true
+    // Create JWT token
+    const jwt = jsonwebtoken.sign(
+      {
+        aud: "jitsi",
+        context: {
+          user: {
+            id,
+            name,
+            avatar,
+            email,
+            moderator: "true",
+          },
+          features: {
+            livestreaming: "true",
+            recording: "true",
+            transcription: "true",
+            "outbound-call": "true",
+          },
+        },
+        iss: "chat",
+        room: "*", // Make sure this is allowed by your Jitsi server.
+        sub: appId,
+        exp: Math.round(now.setHours(now.getHours() + 3) / 1000),
+        nbf: Math.round(Date.now() / 1000) - 10, // Token can be used immediately
       },
-      user: {
-        'hidden-from-recorder': false,
-        moderator: true,
-        name,
-        id: uuid(), // ID unik untuk pengguna
-        avatar,
-        email
-      }
-    },
-    room // Sertakan room
+      privateKey,
+      { algorithm: "RS256", header: { kid } }
+    );
+    return jwt;
   };
 
-  const options = {
-    algorithm: 'RS256',
-    header: {
-      kid: keyId
-    }
-  };
+  const privateKey = fs.readFileSync("./private.key", "utf8");
 
-  return jwt.sign(payload, privateKey, options);
-};
+  const token = generate(privateKey, {
+    id: uuid(),
+    name: "R J",
+    email: "rj142872@gmail.com",
+    avatar: "avatar",
+    appId: "vpaas-magic-cookie-8bb988617ed14047acc207e7f35ddcaa",
+    kid: "vpaas-magic-cookie-8bb988617ed14047acc207e7f35ddcaa/1d6875",
+  });
 
+  console.log(token);
 
-module.exports = (req, res) => {
-  console.log("Request received:", req.body); // Logging request body
-  const { room, name, email, avatar } = req.body;
-  try {
-    const token = generateJWT(room, name, email, avatar);
-    res.json({ token });
-  } catch (error) {
-    console.error("Error generating token:", error); // Logging error
-    res.status(500).send('Failed to generate token');
-  }
-};
+  res.json({ token: token });
+});
+
+app.listen(port, () => {
+  console.log(`app listening on port ${port}`);
+});
+
