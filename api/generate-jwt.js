@@ -17,7 +17,7 @@ app.post("/api/generate-jwt", (req, res) => {
   const { room, name, email, avatar } = req.body;
 
   // Fungsi untuk menghasilkan JWT
-  const generate = (privateKey, { id, name, email, avatar, appId, kid }) => {
+  const generate = (privateKey, { id, name, email, avatar, kid }) => {
     const now = Math.floor(Date.now() / 1000); // Waktu saat ini dalam detik
     const exp = now + (60 * 60); // Token berlaku selama 1 jam
     const nbf = now; // Dapat segera digunakan
@@ -41,7 +41,7 @@ app.post("/api/generate-jwt", (req, res) => {
       },
       iss: "chat",
       room: room,
-      sub: appId,
+      sub: "https://edumeet-nine.vercel.app/",
       exp,
       nbf,
     };
