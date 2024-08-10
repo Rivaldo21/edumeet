@@ -1,64 +1,74 @@
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const { v4: uuid } = require('uuid');
+const jsonwebtoken = require("jsonwebtoken");
+const uuid = require("uuid-random");
+const express = require("express");
+const fs = require("fs"); // Import the fs module to read files
 
-// Jalur absolut untuk kunci pribadi
-const privateKey = fs.readFileSync(`${__dirname}/private.key`, 'utf8');
+const app = express();
+const port = 3000;
 
+// Middleware untuk parse JSON body
+app.use(express.json()); // используйте для обработки JSON-запросов
+
+// Kunci privat diambil dari file
+const privateKey = fs.readFileSync("./private.key", "utf8");
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
-const generateJWT = (room, name, email, avatar) => {
-  const now = Math.floor(Date.now() / 1000); // Waktu sekarang dalam detik
-  const iat = now;
-  const nbf = iat; // Kapan token mulai berlaku
-  const exp = now + (60 * 60); // Token berlaku selama 1 jam
+app.post("/generate-jwt", (req, res) => {
+  // Mengambil input dari body
+  const { name, email, avatar, room } = req.body;
+  
+  // Fungsi untuk menghasilkan JWT dengan parameter yang telah ditetapkan
+  const generate = (privateKey, { id, name, email, avatar, appId, kid }) => {
+    const now = Math.floor(Date.now() / 1000); // Waktu saat ini dalam detik
+    const exp = now + (60 * 60); // Token berlaku selama 1 jam
+    const nbf = now; // Token dapat digunakan segera
 
-  const payload = {
-    aud: 'jitsi', // Audience
-    iss: 'chat', // Issuer
-    iat, // Issued at
-    exp, // Expires
-    nbf, // Not before
-    sub: appId, // Subject
-    context: {
-      features: {
-        livestreaming: true,
-        'outbound-call': true,
-        'sip-outbound-call': false,
-        transcription: true,
-        recording: true
+    const payload = {
+      aud: "jitsi",
+      context: {
+        user: {
+          id,
+          name,
+          avatar,
+          email,
+          moderator: true, // Apakah pengguna adalah moderator
+        },
+        features: {
+          livestreaming: true,
+          recording: true,
+          transcription: true,
+          "outbound-call": true,
+        },
       },
-      user: {
-        'hidden-from-recorder': false,
-        moderator: true, // Apakah pengguna adalah moderator
-        name,
-        id: uuid(), // ID unik untuk pengguna
-        avatar,
-        email
-      }
-    },
-    room // Ruang yang hendak ditempati
+      iss: "chat",
+      room: room, // Ruang meet yang bisa dikontrol
+      sub: appId,
+      exp, // Kapan token kadaluarsa
+      nbf, // Kapan token dapat mulai digunakan
+    };
+
+    // Tanda tangani token
+    return jsonwebtoken.sign(payload, privateKey, {
+      algorithm: "RS256",
+      header: { kid },
+    });
   };
 
-  const options = {
-    algorithm: 'RS256', // Algoritma yang digunakan
-    header: {
-      kid: keyId // Key ID
-    }
-  };
+  // Menghasilkan token JWT
+  const token = generate(privateKey, {
+    id: uuid(),
+    name,
+    email,
+    avatar,
+    appId,
+    kid: keyId, // KID, diperlukan untuk verifikasi
+  });
 
-  return jwt.sign(payload, privateKey, options); // Memberikan JWT ditandai
-};
+  console.log("Generated Token:", token); // Logging token yang dihasilkan
+  res.json({ token });
+});
 
-module.exports = (req, res) => {
-  console.log("Request received:", req.body); // Log input request
-  const { room, name, email, avatar } = req.body;
-  try {
-    const token = generateJWT(room, name, email, avatar);
-    res.json({ token }); // Kirim token sebagai tanggapan JSON
-  } catch (error) {
-    console.error("Error generating token:", error); // Log error
-    res.status(500).send('Failed to generate token'); // Kirim pesan error
-  }
-};
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
