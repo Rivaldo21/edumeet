@@ -41,7 +41,7 @@ app.post("/api/generate-jwt", (req, res) => {
       },
       iss: "chat",
       room: room,
-      sub: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51",
+      sub: appId,
       exp,
       nbf,
     };
