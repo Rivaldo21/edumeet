@@ -41,7 +41,7 @@ app.post("/api/generate-jwt", (req, res) => {
       },
       iss: "chat",
       room: room,
-      sub: "https://edumeet-nine.vercel.app/",
+      sub: "vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51",
       exp,
       nbf,
     };
