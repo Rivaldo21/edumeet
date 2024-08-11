@@ -4,9 +4,10 @@
     { "src": "api/generate-jwt.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/generate-jwt", "dest": "/api/generate-jwt.js" }
+    { "src": "/api/(.*)", "dest": "/api/generate-jwt.js" }
   ]
 }
+
 
 
 
