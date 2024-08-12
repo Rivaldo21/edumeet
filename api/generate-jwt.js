@@ -6,10 +6,10 @@ const app = express();
 const port = 3000;
 
 // Middleware untuk parse JSON body
-app.use(express.json()); // Untuk menangani JSON body
+app.use(express.json()); 
 
 // Mengambil kunci privat dari variabel lingkungan
-const privateKey = process.env.JWT_PRIVATE_KEY; // Kunci privat dari environment variable
+const privateKey = process.env.JWT_PRIVATE_KEY;
 const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
@@ -18,9 +18,9 @@ app.post("/api/generate-jwt", (req, res) => {
 
   // Fungsi untuk menghasilkan JWT
   const generate = (privateKey, { id, name, email, avatar, kid }) => {
-    const now = Math.floor(Date.now() / 1000); // Waktu saat ini dalam detik
-    const exp = now + (60 * 60); // Token berlaku selama 1 jam
-    const nbf = now; // Dapat segera digunakan
+    const now = Math.floor(Date.now() / 1000); 
+    const exp = now + (60 * 60); 
+    const nbf = now; 
 
     const payload = {
       aud: "jitsi",
@@ -30,17 +30,17 @@ app.post("/api/generate-jwt", (req, res) => {
           name,
           avatar,
           email,
-          moderator: true,
+          moderator: true, // Set sebagai boolean
         },
         features: {
-          livestreaming: true,
-          recording: true,
-          transcription: true,
-          "outbound-call": true,
+          livestreaming: "true",
+          recording: "true",
+          transcription: "true",
+          "outbound-call": "true",
         },
       },
       iss: "chat",
-      room: room,
+      room,
       sub: appId,
       exp,
       nbf,
@@ -57,15 +57,13 @@ app.post("/api/generate-jwt", (req, res) => {
     name,
     email,
     avatar,
-    appId,
     kid: keyId,
   });
 
-  console.log("Generated Token:", token); // Output pada console
-  res.json({ token }); // Mengirim token sebagai respons
+  console.log("Generated Token:", token);
+  res.json({ token }); 
 });
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
-
