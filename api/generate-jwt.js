@@ -44,6 +44,7 @@ app.post("/api/generate-jwt", (req, res) => {
       sub: appId,
       exp,
       nbf,
+      kid: keyId,
     };
 
     return jsonwebtoken.sign(payload, privateKey, {
