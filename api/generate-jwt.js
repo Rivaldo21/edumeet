@@ -10,10 +10,10 @@ app.use(express.json());
 
 // Mengambil kunci privat dari variabel lingkungan
 const privateKey = process.env.JWT_PRIVATE_KEY;
-const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/myroom';
+const appId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/room';
 const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
-app.post("/api/generate-jwt", (req, res) => {
+  app.post("/api/generate-jwt", (req, res) => {
   const { room, name, email, avatar } = req.body;
 
   // Fungsi untuk menghasilkan JWT
@@ -44,7 +44,6 @@ app.post("/api/generate-jwt", (req, res) => {
       sub: appId,
       exp,
       nbf,
-      kid: keyId,
     };
 
     return jsonwebtoken.sign(payload, privateKey, {
