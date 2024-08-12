@@ -18,9 +18,9 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
 
   // Fungsi untuk menghasilkan JWT
   const generate = (privateKey, { id, name, email, avatar, kid }) => {
-    const now = Math.floor(Date.now() / 1000); 
-    const exp = now + (60 * 60); 
-    const nbf = now; 
+    const now = Math.floor(Date.now() / 1000);
+    const exp = now + (60 * 60);
+    const nbf = now;
 
     const payload = {
       aud: "jitsi",
@@ -30,7 +30,7 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
           name,
           avatar,
           email,
-          moderator: true, // Set sebagai boolean
+          moderator: true,
         },
         features: {
           livestreaming: "true",
@@ -40,8 +40,8 @@ const keyId = 'vpaas-magic-cookie-a60420f14af34bceba2584ddb6390b51/bcf313';
         },
       },
       iss: "chat",
-      room,
-      sub: appId,
+      room: room,
+      sub: appId, // Sesuaikan dengan App ID yang benar
       exp,
       nbf,
     };
