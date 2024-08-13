@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
         iss: "chat",
         room: "*",
         sub: appId,
-        exp: Math.round(now.setHours(now.getHours() + 3) / 1000),
+        exp: Math.round(now.setFullYear(now.getFullYear() + 1) / 1000),
         nbf: Math.round(new Date().getTime() / 1000) - 10,
       },
       privateKey,
